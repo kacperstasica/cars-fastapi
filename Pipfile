@@ -6,18 +6,18 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = "*"
-psycopg2-binary = "*"
-sqlalchemy = "==1.4.*"
-python-multipart = "*"
-python-jose = "==3.3.*"
-aiofiles = "==0.5.*"
-bcrypt = "==3.2.*"
-cryptography = "==35.0.*"
-passlib = {extras = ["bcrypt"], version = "*"}
+psycopg2 = "==2.9.1"
 pydantic = "*"
+sqlalchemy = "*"
+starlette = "*"
+alembic = "*"
+python-dotenv = "*"
+requests = "*"
 
 [dev-packages]
-"flake8" = "*"
+black = "*"
+factory-boy = "*"
+pytest = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3"
