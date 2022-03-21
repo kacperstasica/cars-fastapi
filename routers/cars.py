@@ -33,8 +33,8 @@ async def create_car(car: CarSchema, db: Session = Depends(get_db)):
     check_db_for_car(car, db)
 
     car_db_model = models.Car()
-    car_db_model.model = car_checker.car_model
-    car_db_model.make = car_checker.car_make
+    car_db_model.model = car_checker.clean_car_model
+    car_db_model.make = car_checker.clean_car_make
 
     db.add(car_db_model)
     db.commit()
@@ -43,8 +43,6 @@ async def create_car(car: CarSchema, db: Session = Depends(get_db)):
 
 @router.get("/")
 async def get_all_cars(db: Session = Depends(get_db)):
-    # return db.query(models.Car).all()
-
     car_reviews = (
         db.query(
             models.Review.car_id, func.avg(models.Review.rating).label("avg_rating")
@@ -58,8 +56,10 @@ async def get_all_cars(db: Session = Depends(get_db)):
         .outerjoin(car_reviews, models.Car.id == car_reviews.c.car_id)
         .all()
     )
+    for obj, avg_rating in object_list:
+        obj.avg_rating = round(avg_rating, 2) if avg_rating else None
 
-    return object_list
+    return db.query(models.Car).all()
 
 
 @router.delete("/{car_id}")
