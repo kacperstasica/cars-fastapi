@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from starlette import status
 from starlette.responses import RedirectResponse
@@ -30,3 +31,8 @@ async def health():
 @app.get("/")
 async def root():
     return RedirectResponse(url="/cars", status_code=status.HTTP_302_FOUND)
+
+
+if __name__ == "__main__":
+    # entrypoint for starting the app as python script - `python main.py` will start the worker
+    uvicorn.run(app, host="0.0.0.0", port=8000)
