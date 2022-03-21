@@ -5,7 +5,7 @@ from src.database import Base
 
 
 class Car(Base):
-    __tablename__ = 'cars'
+    __tablename__ = "cars"
 
     id = Column(Integer, primary_key=True, index=True)
     make = Column(String)
@@ -15,10 +15,13 @@ class Car(Base):
 
 
 class Review(Base):
-    __tablename__ = 'reviews'
+    __tablename__ = "reviews"
 
     id = Column(Integer, primary_key=True, index=True)
     rating = Column(Integer)
-    car_id = Column(Integer, ForeignKey("cars.id"))
+    car_id = Column(Integer, ForeignKey("cars.id", ondelete="cascade"), nullable=True)
 
-    car = relationship("Car", back_populates="reviews")
+    car = relationship(
+        "Car",
+        back_populates="reviews",
+    )

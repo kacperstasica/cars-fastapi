@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.responses import RedirectResponse
 
-from routers import cars
+from routers import cars, reviews
 from src import models
 from src.database import engine, SessionLocal
 
@@ -11,6 +11,7 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 app.include_router(cars.router)
+app.include_router(reviews.router)
 
 
 def get_db():

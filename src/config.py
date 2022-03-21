@@ -6,9 +6,7 @@ from starlette.datastructures import CommaSeparatedStrings, Secret
 
 config = Config(".env")
 
-PROJECT_NAME = config(
-    "Cars API", default="FastAPI application"
-)
+PROJECT_NAME = config("Cars API", default="FastAPI application")
 
 SECRET_KEY: Secret = config("SECRET_KEY", cast=Secret)
 DEBUG = config("DEBUG", cast=bool, default=False)
@@ -19,4 +17,6 @@ ALLOWED_HOSTS: List[str] = config(
 
 DATABASE_URL = config("DATABASE_URL")
 
-MODELS_FOR_MAKE_ENDPOINT = 'https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/{}?format=json'
+MODELS_FOR_MAKE_ENDPOINT = (
+    "https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/{}?format=json"
+)
