@@ -4,16 +4,15 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from services.car_existence_checker import CarExistenceChecker
-from src.database import engine, SessionLocal
+from src.database import engine, SessionLocal, Base
 from src.schemas import CarSchema
-from src import models
-
+from src.models import Car, Review
 
 router = APIRouter(
     prefix="/cars", tags=["cars"], responses={404: {"description": "Not found"}}
 )
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
 def get_db():
@@ -24,7 +23,7 @@ def get_db():
         db.close()
 
 
-@router.post("/")
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_car(car: CarSchema, db: Session = Depends(get_db)):
     car_checker = CarExistenceChecker(car_make=car.make, car_model=car.model)
     if not car_checker.car_exists:
@@ -32,7 +31,7 @@ async def create_car(car: CarSchema, db: Session = Depends(get_db)):
 
     check_db_for_car(car, db)
 
-    car_db_model = models.Car()
+    car_db_model = Car()
     car_db_model.model = car_checker.clean_car_model
     car_db_model.make = car_checker.clean_car_make
 
@@ -43,26 +42,12 @@ async def create_car(car: CarSchema, db: Session = Depends(get_db)):
 
 @router.get("/")
 async def get_all_cars(db: Session = Depends(get_db)):
-    car_reviews = (
-        db.query(
-            models.Review.car_id, func.avg(models.Review.rating).label("avg_rating")
-        )
-        .group_by(models.Review.car_id)
-        .subquery()
-    )
-
-    object_list = (
-        db.query(models.Car, car_reviews.c.avg_rating)
-        .outerjoin(car_reviews, models.Car.id == car_reviews.c.car_id)
-        .all()
-    )
-    for obj, avg_rating in object_list:
-        obj.avg_rating = round(avg_rating, 2) if avg_rating else None
-
-    return db.query(models.Car).all()
+    return db.query(
+        Car.id, Car.make, Car.model, func.round(func.avg(Review.rating), 2).label("avg_rating")
+    ).outerjoin(Review, Car.id == Review.car_id).group_by(Car.id).all()
 
 
-@router.delete("/{car_id}")
+@router.delete("/{car_id}/")
 async def delete_car(car_id: int, db: Session = Depends(get_db)):
     car_db_model = db.query(models.Car).filter(models.Car.id == car_id).first()
 
