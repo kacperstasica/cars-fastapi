@@ -13,11 +13,11 @@ starlette = "*"
 alembic = "*"
 python-dotenv = "*"
 requests = "*"
+pytest = "*"
 
 [dev-packages]
 black = "*"
 factory-boy = "*"
-pytest = "*"
 
 [requires]
 python_version = "3.10"
