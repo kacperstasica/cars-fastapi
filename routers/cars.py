@@ -43,8 +43,15 @@ async def create_car(car: CarSchema, db: Session = Depends(get_db)):
 @router.get("/")
 async def get_all_cars(db: Session = Depends(get_db)):
     return db.query(
-        Car.id, Car.make, Car.model, func.round(func.avg(Review.rating), 2).label("avg_rating")
-    ).outerjoin(Review, Car.id == Review.car_id).group_by(Car.id).all()
+        Car.id,
+        Car.make,
+        Car.model,
+        func.round(func.avg(Review.rating), 2).label("avg_rating")
+    ).outerjoin(
+        Review, Car.id == Review.car_id
+    ).group_by(
+        Car.id
+    ).all()
 
 
 @router.delete("/{car_id}/")

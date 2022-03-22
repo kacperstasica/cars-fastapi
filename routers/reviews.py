@@ -44,5 +44,15 @@ def rate_car(review: ReviewSchema, db: Session = Depends(get_db)):
 @router.get("/popular/")
 def get_cars_by_popularity(db: Session = Depends(get_db)):
     return db.query(
-        Car.id, Car.make, Car.model, func.count(Review.rating).label("rates_number")
-    ).outerjoin(Review, Car.id == Review.car_id).group_by(Car.id).order_by(desc("rates_number")).all()
+        Car.id,
+        Car.make,
+        Car.model,
+        func.count(Review.rating).label("rates_number")
+    ).outerjoin(
+        Review,
+        Car.id == Review.car_id
+    ).group_by(
+        Car.id
+    ).order_by(
+        desc("rates_number")
+    ).all()
