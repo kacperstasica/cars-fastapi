@@ -8,7 +8,7 @@ from starlette.responses import RedirectResponse
 
 from routers import cars, reviews
 from src import models
-from src.database import engine, SessionLocal
+from src.database import engine
 
 app = FastAPI()
 
