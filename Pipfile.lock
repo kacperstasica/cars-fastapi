@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4f72898985547ff62df8e4c40b71999c1493bde6512265af015c018fcabaafbb"
+            "sha256": "eeb934acbf63f1d9b746ae190737546da351f2b6f43a668f738aa5e884faf5e4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -459,22 +459,6 @@
             "markers": "python_version >= '3.6'",
             "version": "==8.0.4"
         },
-        "factory-boy": {
-            "hashes": [
-                "sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e",
-                "sha256:eb02a7dd1b577ef606b75a253b9818e6f9eaf996d94449c9d5ebb124f90dc795"
-            ],
-            "index": "pypi",
-            "version": "==3.2.1"
-        },
-        "faker": {
-            "hashes": [
-                "sha256:66db859b6abe376d02e805ad81eb8dcfce38f0945f17ee7cdf74ed349985ea52",
-                "sha256:fe969607836ce7100e38b88dcb598aacb733d895e6e9401894dd603e35623000"
-            ],
-            "markers": "python_version >= '3.6'",
-            "version": "==13.3.2"
-        },
         "mypy-extensions": {
             "hashes": [
                 "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d",
@@ -496,22 +480,6 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2.5.1"
-        },
-        "python-dateutil": {
-            "hashes": [
-                "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86",
-                "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"
-            ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-            "version": "==2.8.2"
-        },
-        "six": {
-            "hashes": [
-                "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
-                "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
-            ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-            "version": "==1.16.0"
         },
         "tomli": {
             "hashes": [
