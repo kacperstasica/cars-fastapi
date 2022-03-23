@@ -10,7 +10,7 @@ class CarExistenceChecker:
         self.clean_car_make = None
         self.clean_car_model = None
         self.car_exists = False
-        self.response = self.get_vehicles_response()
+        self.response = self.get_cars_response()
         self.check_model_for_make(self.response)
 
     def check_model_for_make(self, response):
@@ -29,7 +29,7 @@ class CarExistenceChecker:
             self.clean_car_model = result["Model_Name"]
             self.clean_car_make = result["Make_Name"]
 
-    def get_vehicles_response(self):
+    def get_cars_response(self):
         response = requests.get(
             MODELS_FOR_MAKE_ENDPOINT.format(self.car_make),
         )
