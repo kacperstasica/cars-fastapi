@@ -9,7 +9,7 @@ from src.schemas import ReviewSchema
 from src import models
 
 
-router = APIRouter(tags=["rate"], responses={404: {"description": "Not found"}})
+router = APIRouter()
 
 models.Base.metadata.create_all(bind=engine)
 

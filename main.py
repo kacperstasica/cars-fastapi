@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from starlette import status
 from starlette.responses import RedirectResponse
 
-from routers import cars, reviews
+from routes.api import router as api_router
 from src import models
 from src.database import engine
 
@@ -14,8 +14,7 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
-app.include_router(cars.router)
-app.include_router(reviews.router)
+app.include_router(api_router)
 # stop redirecting paths without trailing slash to slash (we want response 404 instead of 307)
 app.router.redirect_slashes = False
 
