@@ -1,13 +1,14 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Response
 from sqlalchemy import func
 
 from sqlalchemy.orm import Session
 
+from .dependencies import check_db_for_car
 from services.car_existence_checker import CarExistenceChecker
-from src.database import engine, SessionLocal, Base
-from src.schemas import CarSchema, CarCreate
+from src.database import engine, Base, get_db
+from src.schemas import CarCreate, CarInResponse
 from src.models import Car, Review
 
 router = APIRouter()
@@ -15,15 +16,7 @@ router = APIRouter()
 Base.metadata.create_all(bind=engine)
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=CarCreate)
 async def create_car(car: CarCreate, db: Session = Depends(get_db)):
     car_checker = CarExistenceChecker(car_make=car.make, car_model=car.model)
     if not car_checker.car_exists:
@@ -37,10 +30,14 @@ async def create_car(car: CarCreate, db: Session = Depends(get_db)):
 
     db.add(car_db_model)
     db.commit()
-    return {"status": status.HTTP_201_CREATED, "transaction": "Successful"}
+
+    return CarCreate(
+        make=car_checker.clean_car_make,
+        model=car_checker.clean_car_model
+    )
 
 
-@router.get("/")
+@router.get("/", response_model=List[CarInResponse])
 async def get_all_cars(db: Session = Depends(get_db)):
     return db.query(
         Car.id,
@@ -60,18 +57,10 @@ async def delete_car(car_id: int, db: Session = Depends(get_db)):
 
     if car_db_model is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="No such car in the database."
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No car with given id ({car_id}) in the database."
         )
 
     db.query(Car).filter(Car.id == car_id).delete()
     db.commit()
     return {"status": status.HTTP_200_OK, "transaction": "Successful"}
-
-
-def check_db_for_car(car, db):
-    car = db.query(Car).filter(Car.model == car.model).first()
-    if car is not None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Car with this model already exists in our database.",
-        )
