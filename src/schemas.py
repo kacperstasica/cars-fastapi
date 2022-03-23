@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -11,15 +9,25 @@ class ReviewSchema(BaseModel):
         orm_mode = True
 
 
-class CarSchema(BaseModel):
+class CarBase(BaseModel):
+    class Config:
+        orm_model = True
+
+
+class CarCreate(CarBase):
+    make: str = "Volkswagen"
+    model: str = "Golf"
+
+
+class CarInResponse(CarBase):
+    id: int
     make: str
     model: str
+    avg_rating: float | None = None
 
-    class Config:
-        orm_mode = True
-        schema_extra = {
-            "example": {
-                "make": "Volkswagen",
-                "model": "Gold",
-            }
-        }
+
+class CarInResponseByPopularity(CarBase):
+    id: int
+    make: str
+    model: str
+    rates_number: int
